@@ -4,4 +4,5 @@
 /server/src/public/thumbnails/videos/*
 */unknown_hosts.txt
 /server/tmp.txt
+/server/.env
 */node_modules/
