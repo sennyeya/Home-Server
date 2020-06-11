@@ -1,0 +1,7 @@
+/server/src/public/*.*
+/server/src/public/thumbnails/*.*
+/server/src/public/thumbnails/posters/*
+/server/src/public/thumbnails/videos/*
+*/unknown_hosts.txt
+/server/tmp.txt
+*/node_modules/

@@ -1,0 +1,24 @@
+import React from 'react';
+import Loader from 'react-loader-spinner'
+
+export default function Loading() {
+  return (
+      <div className="loading"></div>
+  );
+}
+
+export function LoadingIndicator(){
+  return (
+    <div style={{padding:"2% 2% 2% 2%", margin:"auto"}}>
+      <Loader type="TailSpin" color="#FFFFFF" height={40} width={40}/>
+    </div>
+  )
+}
+
+export function LoadingIndicatorSmall(props){
+  return (
+    <div style={{margin:"auto", height:"20px", width:"24px", padding:"2%"}}>
+      <Loader type="TailSpin" color={props.color||"#FFFFFF"} height={20} width={20} style={props.style}/>
+    </div>
+  )
+}

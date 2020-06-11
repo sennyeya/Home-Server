@@ -1,0 +1,16 @@
+.form-item {
+    display: flex;
+    flex-direction: row;
+    width:100%;
+    padding: 1% 4%;
+    justify-content: space-around;
+    align-items: center;
+  }
+  
+  .form-item-label{
+    flex-basis:10%;
+  }
+  
+  .form-item-input{
+    flex-basis: 90%;
+  }

@@ -1,0 +1,21 @@
+.input-container{
+    padding: 0 5%;
+    width:100%;
+}
+
+.input-wrapper{
+    width:90%;
+    padding: 10px 1%;
+    border-radius: 10px;
+    overflow:hidden;
+    white-space: nowrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.input-wrapper input {
+    border-width: 0;
+    outline: none;
+    flex-basis: 100%;
+}

@@ -1,0 +1,22 @@
+
+.button-grid{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 4% 0;
+}
+
+.button-item{
+    max-width: 15%;
+    padding: 1% 1%;
+}
+
+a.button-item{
+  width: 20%;
+  padding: 0 0;
+  margin: 1% 1%;
+  flex-basis: 20%;
+  text-decoration: none;
+}
