@@ -1,5 +1,4 @@
 import React from 'react';
-import './Search.css';
 import './InputWrapper.css'
 
 export default function Search(props) {

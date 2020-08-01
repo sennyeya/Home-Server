@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Redirect
+  Route
 } from "react-router-dom";
 import './App.css';
 import ThemeContext, { ThemeSettings } from './contexts/ThemeContext'
@@ -16,6 +15,13 @@ import {createUseStyles} from 'react-jss';
 import MediaGallery from './media/MediaGallery'
 import MenuBar from './menu/MenuBar';
 import HomePage from './routes/Homepage'
+import Dashboard from './routes/Dashboard';
+import CreatePlaylist from './routes/CreatePlaylist';
+import MessageLogger from './shared/MessageLogger';
+import PlaylistGallery from './routes/PlaylistGallery';
+import ErrorBoundary from './ErrorBoundary'
+import {useMessageOutlet} from './contexts/MessagingContext'
+import { useUserOutlet } from './contexts/UserContext';
 
 // Dark/Light mode.
 const useStyles = createUseStyles(ThemeSettings)
@@ -25,109 +31,96 @@ const useStyles = createUseStyles(ThemeSettings)
  * @param {Object} props 
  */
 export default function App(props){
-  /** Dark/Light mode state. */
-  const [value, setValue] = React.useState('dark');
-
   /** Loading state, true if ip is registered and user profile has been received. */
   const [loading, setLoading] = React.useState(true);
 
-  /** Gets logged in user profile, null if not logged in. */
-  const [loggedIn, setLoggedIn] = React.useState(null);
-
-  /** Error state, set if the secondary IP register server fails. */
-  const [error, setError] = React.useState(false);
-
   let classes = useStyles();
 
-  /**
-   * Toggle for setting theme.
-   */
-  const updateValue = ()=>{
-    let updated;
-    if(value==='dark'){
-      setValue('light')
-      updated = 'light'
-    }else{
-      setValue('dark')
-      updated = 'dark'
-    }
-    setStyle(updated)
-  }
+  let setMessage = useMessageOutlet();
 
-  /**
-   * Updates the document body(background) with the corresponding mode theme.
-   * @param {String} theme 'dark'/'light' modes
-   */
-  const setStyle = (theme) =>{
-    for(let val of Object.keys(ThemeSettings[theme])){
-      document.body.style[val] = ThemeSettings[theme][val];
-    }
-  }
+  let setUser = useUserOutlet();
+
+  let {theme} = useContext(ThemeContext)
 
   /**
    * Registers IP, and then gets the current user.
    */
   useEffect(()=>{
-    // Need to register ip for local use when using CORS and cookie authentication.
-    fetch('http://192.168.0.33:4001/register_ip').then(e=>{
-      // Get user.
+    /** Check if the user is logged in. */
+    const getLoggedInState = () =>{
       API.getRoute("/","/is_auth").then(e=>{
-        setStyle(value)
-        setLoggedIn(e)
+        setUser(e.user);
         setLoading(false);
       }).catch(e=>{
-        setLoggedIn(null);
+        setUser(null);
         setLoading(false);
       })
-    }).catch(e=>{
-      setError(true)
-    })
-  }, []);
+    }
 
-  // Updates the array of media with possible newer data on disk.
-  const updateCache = () =>{
-    API.get("/reset_cache")
-  }
+    /** 
+     * Assert that the IP registration server is up and running, 
+     * this is only needed when accessing locally, ie with IP addresses.
+     */
+    const registerIp = () =>{
+      fetch('http://192.168.0.33:4001/register_ip').then(e=>{
+        // Get user.
+        getLoggedInState();
+      }).catch(e=>{
+        setMessage(new Error("Make sure your IP registration server is running!"))
+        setTimeout(registerIp, 30000)
+      });
+    }
+    // Need to register ip for local use when using CORS and cookie authentication.
+    registerIp();
+  }, []);
 
   // Returns main router. Will redirect to login page if user is not authenticated. Defaults to hiding nav bar while loading.
   return (
-    <ThemeContext.Provider value={{theme:value,toggleTheme:updateValue}}>
-      <ThemeContext.Consumer>
-        {({theme,toggleTheme})=>
-        <div style={{...ThemeSettings[theme], height:"100%"}} className={classes[theme]}>
-          {error?<p>Make sure your server is running.</p>:(
-          <Router>
-            {
-              loading? <Loading/>:(
-                <MenuBar update={updateCache} toggle={toggleTheme} user={loggedIn}/>
-                )}
-                <div className="content-container">
+    <div>
+      <head>
+        <link rel="stylesheet" href="https://cdn.plyr.io/3.6.2/plyr.css" />
+      </head>
+      <Router>
+        {
+      loading? <Loading/>:(
+        <MenuBar/>
+        )}
+        <div style={{...ThemeSettings[theme], minHeight:"95vh"}} className={classes[theme]}>
+            <div className="content-container">
+              <MessageLogger/>
+              <ErrorBoundary>
+                <div className="content">
                   <Switch>
                     <Route exact path="/">
-                      <HomePage/> 
+                      <HomePage/>
                     </Route>
                     <Route path="/mediaGallery">
-                        <MediaGallery />
+                      <MediaGallery/>
                     </Route>
                     <Route path="/dashboard">
-                      <HomePage/>
+                      <Dashboard/>
                     </Route>
                     <Route path="/media">
                       <Media path={window.location.pathname.replace("/media/","")}/>
                     </Route>
                     <Route path="/login">
-                      <Login setLoggedIn={setLoggedIn} user={loggedIn}/>
+                      <Login/>
                     </Route>
                     <Route path="/upload">
                       <Upload/>
                     </Route>
+                    <Route path="/create_playlist">
+                      <CreatePlaylist/>
+                    </Route>
+                    <Route path="/playlists">
+                      <PlaylistGallery/>
+                    </Route>
                   </Switch>
                 </div>
-              </Router>
-              )}
-              </div>
-            }
-        </ThemeContext.Consumer>
-    </ThemeContext.Provider>
+              </ErrorBoundary>
+            </div>
+          </div>
+        </Router>
+      </div>
   )
 }

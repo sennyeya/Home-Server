@@ -1,0 +1,20 @@
+
+.profile-recently-watched{
+    width: 72%;
+    display: inline-block;
+}
+
+.profile-playlists{
+    width: 20%;
+    float: right;
+}
+
+@media screen and (max-width: 1000px) {
+    .profile-recently-watched{
+        width: 100%;
+    }
+    .profile-playlists{
+        width: 100%;
+        float: none;
+    }
+}

@@ -1,0 +1,20 @@
+.hidden-gallery .blurred-content{
+    height: 100%;
+    width: 100%;
+    filter: blur(10px);
+    background-color: grey;
+    z-index: 0;
+}
+
+div.hidden-gallery{
+    border-radius: 20px;
+}
+
+.hidden-gallery span{
+    position: absolute;
+    z-index: 100;
+    filter: none;
+    text-align: center;
+    left: 50%;
+    transform: translate(-50%, -10vh);
+}

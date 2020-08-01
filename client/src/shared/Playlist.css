@@ -1,0 +1,32 @@
+.playlist-content-container{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.playlist-container.boxed-content{
+    padding: 0 0;
+}
+
+.playlist-content-container button{
+    flex-basis: 10%;
+    margin:2%;
+}
+
+@media (max-width: 1000px) {
+    .playlist-content-container{
+        flex-wrap: wrap;
+    }
+    .playlist-content-container button{
+        flex-basis: 100%;
+    }
+
+    .playlist-container h2{
+        padding: 2% 2%;
+    }
+
+    .playlist-container h2:not(.first){
+        border-top: 1px solid black;
+    }
+}

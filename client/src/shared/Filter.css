@@ -2,46 +2,27 @@
     display:flex;
     flex-wrap: wrap;
     align-items: center;
-    background-color: #121212;
-    margin: 4% 0;
-    border-radius: 10px;
+    border-radius: 0 0 10px 10px;
 }
 
 .filter-bar-container{
-    flex-basis: 80%;
+    flex-basis: 100%;
     height: 100%;
-    margin: 4% 2% 4% 2%;
+    padding-bottom: 2%;
     display:flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    font-size: 14px;
 }
 
 .filter-item.type-media{
     padding: 0 2%;
-    flex-basis: 12%
-}
-
-.filter-bar input {
-    width: 98%;
-    border-radius: 10px;
-    border-width: 0;
-    padding: 1% 1.5% 1% 1.5%;
-    font-weight: 500;
-    font-size: 16px;
-    outline: none;
-}
-
-.filter-bar button {
-    word-break: normal;
-    flex-basis: 5%;
-    font-size: 16px;
-    line-height: 1;
-    font-weight: 400;
+    flex-basis: 15%
 }
 
 .filter-item{
-    flex-basis: 35%;
+    flex-basis: 40%;
     padding: 0 1%;
 }
 

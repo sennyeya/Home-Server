@@ -1,4 +1,5 @@
 import React from 'react';
+import {getParamFromURL} from './Utils'
 
 export default class HistoryTracking extends React.PureComponent {
 
@@ -6,8 +7,7 @@ export default class HistoryTracking extends React.PureComponent {
         super(props)
         this.state = {
             value: props.value,
-            name: props.name,
-            manualChange: false
+            name: props.name
         }
         this.updateHistoryFromPage = this.updateHistoryFromPage.bind(this);
         this.updatePageFromHistory = this.updatePageFromHistory.bind(this);
@@ -32,19 +32,22 @@ export default class HistoryTracking extends React.PureComponent {
             for(let e of query){
                 let split = e.split("=")
                 if(split[0]===name){
-                    console.log(`Value: ${split[1]} Type: ${typeof this.parseType(split[1])}`)
-                    this.setState({value:this.parseType(split[1]), manualChange: true});
-                    this.props.trigger(split[1]);
+                    let parsed = this.parseType(split[1]);
+                    this.setState({value:parsed});
+                    this.props.trigger(parsed);
                     return;
                 }
             }
         }else{
-            this.setState({value:this.parseType(value), manualChange: true})
+            this.setState({value:this.parseType(value)})
             this.props.trigger(value);
         }
     }
 
     updateHistoryFromPage = (val) =>{
+        if(this.props.list){
+            val = val.value
+        }
         let query = window.location.search;
         let {name} = this.state;
         let htmlText = `${name}=${val}`;
@@ -54,9 +57,14 @@ export default class HistoryTracking extends React.PureComponent {
             for(let e of query){
                 let split = e.split("=")
                 if(split[0]===name){
-                    split[1] = val
+                    if(val!==""){
+                        split[1] = val
+                    }
                 }
-                arr.push(`${split[0]}=${split[1]}`)
+                let param = `${split[0]}=${split[1]}`;
+                if(!arr.includes(param)){
+                    arr.push(param)
+                }
             }
             if(!arr.includes(htmlText)){
                 arr.push(htmlText)
@@ -93,15 +101,9 @@ export default class HistoryTracking extends React.PureComponent {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.value!==this.props.value){
-            this.updateHistoryFromPage(this.props.value)
-        }
-    }
-
     render(){
         return (
-        <>{console.log(this.state.value)}</>
+        <></>
         )
   }
 }

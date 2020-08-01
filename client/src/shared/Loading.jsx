@@ -9,7 +9,15 @@ export default function Loading() {
 
 export function LoadingIndicator(){
   return (
-    <div style={{padding:"2% 2% 2% 2%", margin:"auto"}}>
+    <div style={{padding:"2%", margin:"auto", textAlign:"center"}}>
+      <Loader type="TailSpin" color="#FFFFFF" height={40} width={40}/>
+    </div>
+  )
+}
+
+export function LoadingIndicatorOverlay(){
+  return (
+    <div style={{margin:"auto", textAlign:"center", position:"absolute", zIndex:"1"}}>
       <Loader type="TailSpin" color="#FFFFFF" height={40} width={40}/>
     </div>
   )

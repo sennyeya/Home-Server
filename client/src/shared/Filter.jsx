@@ -1,47 +1,46 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import API from '../API';
 import './Filter.css'
 import { useEffect } from 'react';
 import AsyncMultiselect from './AsyncMultiselect';
-import {CustomCheckmark} from './CustomInputs'
 import HistoryTracking from './HistoryTracking';
 import FormElement from './FormElement';
-import InputWrapper from './InputWrapper'
+import InputWrapper from './InputWrapper';
+import AsyncSingleSelect from './AsyncSingleSelect'
+import ToggleSlider from './ToggleSlider';
+import { getParamFromURL } from './Utils';
 
-export default function Search(props) {
-    const [video, setVideo] = React.useState(false);
-    const [image, setImage] = React.useState(false);
-    const [tags, setTags] = React.useState([]);
-    const [from, setFrom] = React.useState("");
-    const [to, setTo] = React.useState("");
-    const videoRef = React.createRef();
-    const imageRef = React.createRef();
-    const tagsRef = React.createRef();
-    const toRef = React.createRef();
-    const fromRef = React.createRef();
+/**
+ * Filter bar functionality, allows filtering based on type, date, and tags.
+ * @param {{update:Function, }} props 
+ * @param update parent function to pass selected options to parent element.
+ */
+export default function Filter(props) {
+    /** Does the user want video media? */
+    const [video, setVideo] = React.useState(getParamFromURL("video")||false);
 
-    const requestSearch = (e) =>{
-        props.update({video, image, tags, from, to});
-    }
+    /** Does the user want image media? */
+    const [image, setImage] = React.useState(getParamFromURL("image")||false);
+    const [tags, setTags] = React.useState(getParamFromURL("tags")||[]);
+    const [from, setFrom] = React.useState(getParamFromURL("from")||"");
+    const [to, setTo] = React.useState(getParamFromURL("to")||"");
+    const [sortBy, setSortBy] = React.useState(getParamFromURL("sortby")||"")
 
-    useEffect(()=>{
-        if(typeof video === 'string'){
-            setVideo(video==="true")
-        }
-        if(typeof image === 'string'){
-            setImage(image==='true')
-        }
-    }, [video, image, tags, from, to])
+    /** Update parent whenever anything changes. */
+    useEffect(() =>{
+        props.update({video, image, tags, from, to, sortBy});
+        props.trigger();
+    }, [video, image, tags, from, to, sortBy])
 
     return (
         <div className="filter-bar">
-            <HistoryTracking name="video" value={video} ref={videoRef} trigger={setVideo} overwrite/>
-            <HistoryTracking name="image" value={image} ref={imageRef} trigger={setImage} overwrite/>
-            <HistoryTracking name="tags" value={tags} ref={tagsRef} trigger={setTags} overwrite/>
-            <HistoryTracking name="to" value={to} ref={toRef} trigger={setTo} overwrite/>
-            <HistoryTracking name="from" value={from} ref={fromRef} trigger={setFrom} overwrite/>
+            <HistoryTracking name="video" value={video} trigger={setVideo} overwrite/>
+            <HistoryTracking name="image" value={image} trigger={setImage} overwrite/>
+            <HistoryTracking name="tags" value={tags} trigger={setTags} list overwrite/>
+            <HistoryTracking name="to" value={to} trigger={setTo} overwrite/>
+            <HistoryTracking name="from" value={from} trigger={setFrom} overwrite/>
+            <HistoryTracking name="sortby" value={sortBy} trigger={setSortBy} overwrite/>
             <div className="filter-bar-container">
-                {console.log(props.options)}
                 <div className="filter-item type-date">
                     <FormElement label={<label htmlFor="from">
                                             From:
@@ -50,7 +49,7 @@ export default function Search(props) {
                                         <input type="date" 
                                             id="from" 
                                             value={from} 
-                                            onChange={(e)=>setFrom(e.target.value)}/>
+                                            onChange={(e)=>setFrom(e.target.value?e.target.value:"")}/>
                                         }/>}/>
                     
                     <FormElement label={<label htmlFor="to">
@@ -61,19 +60,19 @@ export default function Search(props) {
                                                 id="to" 
                                                 min={from} 
                                                 value={to} 
-                                                onChange={(e)=>setTo(e.target.value)}/>}
+                                                onChange={(e)=>setTo(e.target.value?e.target.value:"")}/>}
                                         />}
                                 />
                 </div>
                 <div className="filter-item type-media">
-                    <FormElement label={<label>Image: </label>} item={<CustomCheckmark checked={image} id="image" update={setImage}/>}/>
-                    <FormElement label={<label>Video: </label>} item={<CustomCheckmark checked={video} id="video" update={setVideo}/>}/>
+                    <FormElement label={<label>Image: </label>} item={<ToggleSlider cond={image} val1={true} val2={false} update={setImage}/>}/>
+                    <FormElement label={<label>Video: </label>} item={<ToggleSlider cond={video} val1={true} val2={false} update={setVideo}/>}/>
                 </div>
                 <div className="filter-item type-tags">
                     <FormElement label={<label>Tag(s): </label>} item={<AsyncMultiselect url="list_tags" update={setTags}/>}/>
+                    <FormElement label={<label>Sort By: </label>} item={<AsyncSingleSelect url="list_sortby" update={setSortBy} selected={sortBy}/>}/>
                 </div>
             </div>
-            <button onClick={requestSearch}>Filter</button>
         </div>
     )
 }

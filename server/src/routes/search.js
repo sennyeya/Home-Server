@@ -28,6 +28,7 @@ app.post('/', async (req, res)=>{
     }
     let search = await Search.findOne({query:req.body.query}).exec();
     let searchParams;
+    console.log(`Search for "${req.body.query}" being created, found object: ${search}`)
     if(search){
         if(!search.searchParams){
             searchParams = generateSearchParams(req.body.query);
@@ -43,7 +44,7 @@ app.post('/', async (req, res)=>{
     }
 
     res.json({
-        id:search._id
+        id:search.id
     });
 })
 

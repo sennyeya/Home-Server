@@ -1,0 +1,74 @@
+.profile-image{
+    max-width: 3vh;
+    max-height: 3vh;
+    height: 3vh;
+    width: 3vh;
+    min-width: 3vh;
+    min-height: 3vh;
+    border-radius: 100%;
+    object-fit:cover;
+    cursor: pointer;
+}
+
+.popup-container{
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    width: 200px;
+    height: 0;
+    color:white;
+    overflow: visible;
+    background: #363636;
+    text-align: center;
+    opacity: 0;
+    line-height: 0;
+    animation: slide 0.2s linear forward ;
+    padding: 5% 0;
+    visibility: hidden;
+}
+
+button.profile-icon{
+    padding: 1vh .2vw;
+    line-height: 0;
+    border: none;
+    border-radius: 0%;
+    background: transparent;
+    display: inline;
+    text-align: right;
+    border-radius: 20px;
+    font-size: 0px;
+    font-weight: 100;
+    text-decoration: none;
+    cursor: default;
+    line-height: 0px;
+    margin: 0%;
+    border-style: none;
+    outline: none;
+}
+
+.popup-container.active{
+    opacity: 1;
+    line-height: 2;
+    height: auto;
+    visibility: visible;
+    right: 0;
+    top: 4vh;
+    z-index: 100;
+}
+
+.popup-item{
+    border-bottom: 1px solid black;
+    padding: 2%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.popup-item.first{
+    border-top: 1px solid black;
+}
+
+@keyframes dropDown{
+    from {height: 0;}
+    to {height: auto;}
+}

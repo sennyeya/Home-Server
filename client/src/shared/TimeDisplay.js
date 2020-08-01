@@ -15,7 +15,7 @@ export default function TimeDisplay(props) {
     hours += props.hour || 0;
   return (
       <>
-      <span style={{wordWrap:"normal", overflowWrap:"normal", whiteSpace: "nowrap"}}>
+      <span style={{wordWrap:"normal", overflowWrap:"normal", whiteSpace: "nowrap", paddingLeft: "4px"}}>
             { 
                 (hours?
                 (hours+":"+(minutes+"").padStart(2, "0")+":"+(seconds+"").padStart(2, "0")):

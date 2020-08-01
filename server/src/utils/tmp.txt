@@ -1,6 +1,0 @@
-file 'E:/Personal/Projects/Home Server/server/src/public/thumbnails/videos/5ede8fd61293bb432c687b30/0.mp4'
-file 'E:/Personal/Projects/Home Server/server/src/public/thumbnails/videos/5ede8fd61293bb432c687b30/1.mp4'
-file 'E:/Personal/Projects/Home Server/server/src/public/thumbnails/videos/5ede8fd61293bb432c687b30/2.mp4'
-file 'E:/Personal/Projects/Home Server/server/src/public/thumbnails/videos/5ede8fd61293bb432c687b30/3.mp4'
-file 'E:/Personal/Projects/Home Server/server/src/public/thumbnails/videos/5ede8fd61293bb432c687b30/4.mp4'
-file 'E:/Personal/Projects/Home Server/server/src/public/thumbnails/videos/5ede8fd61293bb432c687b30/5.mp4'

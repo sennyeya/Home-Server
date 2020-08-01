@@ -27,9 +27,9 @@ spawn('node', ['src/registerIp.js'])
 
 let hosts = fs.readFileSync('known_hosts.txt').toString().split("\n").map(host=>{
     if(!host){
-        return "http://localhost:3001"
+        return "http://localhost:3000"
     }else{
-        return "http://"+host+":3001"
+        return "http://"+host+":3000"
     }
 });
 
@@ -97,13 +97,18 @@ app.post('/login', async (req, res)=>{
                  if(err){ 
                    res.status(401).json({message: err}) 
                  }else{ 
-                   res.status(200).json({username:user.username, viewed:user.viewed});
+                   res.status(200).json({user});
                  } 
                }) 
              } 
             } 
          })(req, res); 
     }
+});
+
+app.get('/logout', async (req, res)=>{
+    req.logout();
+    res.json({message:"Logged out successfully"})
 })
 
 /**

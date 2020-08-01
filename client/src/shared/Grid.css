@@ -5,16 +5,13 @@
     flex-basis:content;
     flex-wrap: wrap;
     margin:auto;
-    justify-content: center;
-    align-items: center;
+    justify-content: baseline;
+    align-items: baseline;
 }
 
 .content-item{
-    flex-basis: 23%;
-    margin: 1% 1%;
-    object-fit: contain;
-    justify-content: center;
-    align-items: center;
+    padding: .5%;
+    margin: 1%;
 }
 
 .thumbnail-details{

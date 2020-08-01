@@ -1,10 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-const {TagSchema} = require('./Tag');
-const {ThumbnailSchema} = require('./Thumbnail')
 
 var metadataSchema = new Schema({
-    name: {type:String,unique: true},
+    name: String,
     width: Number,
     height: Number,   
     format: String,
@@ -14,9 +12,10 @@ var metadataSchema = new Schema({
     likes: Number,
     dislikes: Number,
     created: Date,
-    tags: [TagSchema],
-    thumbnail: ThumbnailSchema,
-    poster: ThumbnailSchema
+    tags: [{type:Schema.Types.ObjectId, ref:'tags'}],
+    thumbnail: {type:Schema.Types.ObjectId, ref:'thumbnails'},
+    poster: {type:Schema.Types.ObjectId, ref:'thumbnails'},
+    comments: [{type: Schema.Types.ObjectId, ref:'comments'}]
 }, { collection: 'metadata' });
 
 metadataSchema.index({ name: 'text', path: 'text', format: 'text'});

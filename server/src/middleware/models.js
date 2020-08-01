@@ -19,15 +19,17 @@ module.exports = {
             }
             id = id[objPath];
             if(!id){
+                console.log(`No document found for id: ${id}`)
                 res.sendStatus(400);
                 return;
             }
             model.findById(id).exec((err, data)=>{
                 if(err){
-                    console.log(err);
+                    console.log(`An error occurred while looking up this document: ${err}`);
                     res.sendStatus(404);
                 }else{
                     if(!data){
+                        console.log(`An error occurred while looking up this document: ${err} for ID: ${id}`);
                         res.sendStatus(404);
                         return;
                     }else{

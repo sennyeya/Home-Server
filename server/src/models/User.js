@@ -7,8 +7,8 @@ const passportLocalMongoose = require('passport-local-mongoose');
 var userSchema = new Schema({
     name: String,
     email: String,
-    viewed: [MetadataSchema],
-    profile: ProfileSchema
+    viewed: [{type:Schema.Types.ObjectId, ref:'metadata'}],
+    profile: {type:Schema.Types.ObjectId, ref:'profiles'}
 });
 
 userSchema.plugin(passportLocalMongoose);

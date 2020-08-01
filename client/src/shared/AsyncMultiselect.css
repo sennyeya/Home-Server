@@ -32,12 +32,41 @@ select{
     display: block;
 }
 
-.list-items a {
+.list-items button {
     width: 100%;
     cursor: pointer;
-    font-weight: 500;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    border-radius: 0%;
+    background: transparent;
+    border: none !important;
+    font-size: small;
+    text-align: left;
 }
 
 .list-items span:hover{
-    background-color: #262626;
+    background: #262626;
+}
+
+.selected-items-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 100%;
+    padding: 3% 1%;
+}
+
+.selected-item{
+    border-radius: 20px;
+    padding: 2% 4%;
+    margin: 0 1%;
+    background-color: grey;
+}
+
+.selected-item-remove{
+    padding: 0 4px;
+    background-color: black;
+    text-align: center;
+    border-radius: 40px;
 }

@@ -1,0 +1,24 @@
+.tab-header{
+    display: flex;
+    flex-direction: row;
+}
+
+.tab{
+    margin: 0 2%;
+    padding: 2%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    word-wrap: normal;
+}
+
+.tab-content{
+    min-height: 10px;
+    border-radius: 20px;
+    padding: 1% 0;
+}
+
+@media (max-width: 1000px) {
+    .tab-container{
+        margin: 0;
+    }
+}

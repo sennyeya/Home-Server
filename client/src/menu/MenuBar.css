@@ -1,8 +1,21 @@
 nav {
     height: 5vh;
-    overflow: hidden;
-    position:sticky;
-    background: #242424;
+    background-color: #242424;
+    overflow: hidden !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .5s ease-in-out;
+  }
+  nav.active{
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sticky-menu{
+    position:fixed;
+    width: 100%;
+    top:0;
+    z-index: 1000;
   }
   
   nav ul {
@@ -17,22 +30,18 @@ nav {
     list-style-type: none;
   }
   
-  nav a {
+  nav a, nav a:visited {
     display: block;
     color: white;
     font-size: 15px;
     font-weight: lighter;
     text-decoration: none;
-    transition: 0.3s;
+    transition: .5s ease-in-out;
     word-wrap: normal;
-  }
-  
-  nav .selected {
-    color: #B8B8B8;
   }
 
   nav a:hover {
-    color: #B8B8B8;
+    color: #bcbcbc;
   }
   
   .appleNav {
@@ -43,6 +52,44 @@ nav {
 .menu-settings{
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+}
+li .selected{
+  padding: 1.5vh 0;
+  border-bottom: 5px solid grey;
+}
+
+.mobile-menu{
+  display: none;
+  justify-content: left;
+  flex-direction: row;
+  height: 5vh;
+  width: 100%;
+  background: #242424;
+  position: sticky;
+  overflow: hidden;
+  align-items: center;
+}
+
+.mobile-menu img{
+  cursor: pointer;
+  padding: 3%;
+}
+
+@media (max-width: 1000px) {
+  .mobile-menu{
+    display: flex;
+  }
+  nav{
+    visibility: hidden;
+    transition: none;
+  }
+}
+
+.profile-menu-container{
+  position: absolute;
+  top: 0;
+  right: 1vw;
+  text-align: right;
 }

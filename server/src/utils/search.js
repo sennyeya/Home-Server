@@ -27,7 +27,7 @@ const searchSearch = (query) =>{
         })
 }
 
-const runSearch = async (id, size, offset = 0) =>{
+const runSearch = async (id, size, offset = 0, filters, sortBy) =>{
     return new Promise(async (res, rej)=>{
         let search = await Search.findById(id).exec();
         let searchParams;
@@ -42,13 +42,14 @@ const runSearch = async (id, size, offset = 0) =>{
         }else{
             return rej("No search found.");
         }
-        let data = await searchMetadata(search.query).limit(size).skip(offset).exec();
+        let data = await searchMetadata(search.query).find(filters).sort(sortBy).limit(size).skip(offset).exec();
         console.log(`Found ${data.length} for the id: "${id}"`)
         let length = await Metadata.countDocuments(
             {
                 $text:{
                     $search:search.query
-                }
+                },
+                ...filters
             }
         )
         res({items:data, length})

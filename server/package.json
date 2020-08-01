@@ -6,7 +6,8 @@
   "scripts": {
     "dev:build-server": "set NODE_ENV=development webpack --config webpack.server.js --mode=development -w",
     "dev:start": "nodemon ./server-build/index.js",
-    "dev": "npm-run-all --parallel build dev:*"
+    "dev": "npm-run-all --parallel build dev:*",
+    "start":"nodemon"
   },
   "author": "",
   "license": "ISC",

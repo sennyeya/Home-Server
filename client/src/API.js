@@ -1,4 +1,10 @@
 import Config from './config';
+import MessagingContext from './contexts/MessagingContext';
+
+const setError = (resp) =>{
+    return resp.json().then(data=>{if(MessagingContext.setMessage) MessagingContext.setMessage(data)})
+                        .catch(err=>{if(MessagingContext.setMessage) MessagingContext.setMessage({message:err})})
+}
 
 /**
  * Server access class.
@@ -15,11 +21,10 @@ export default {
             params = Object.keys(params).map(e=>e+"="+params[e]).join("&")
             fetch(Config.api+url+(params?("?"+params):""), {credentials: 'include'})
                 .then(resp=>{
-                    if(!resp.ok) rej(resp.statusText)
+                    if(!resp.ok) return setError(resp)
                     return resp.json()
                 })
                 .then(json=>res(json))
-                .catch(err=>rej(err))
         })
     },
 
@@ -35,11 +40,10 @@ export default {
             params = Object.keys(params).map(e=>e+"="+params[e]).join("&")
             fetch(url+(params?("?"+params):""), {credentials: 'include'})
                 .then(resp=>{
-                    if(!resp.ok) rej(resp.statusText)
+                    if(!resp.ok) setError(resp)
                     return resp.json()
                 })
                 .then(json=>res(json))
-                .catch(err=>rej(err))
         })
     },
 
@@ -59,11 +63,10 @@ export default {
                     'Content-Type': 'application/json'
                 },
             }).then(resp=>{
-                if(!resp.ok) rej(resp.statusText)
+                if(!resp.ok) setError(resp)
                 return resp.json()
             })
             .then(json => res(json))
-            .catch(err=>rej(err))
         })
     },
 
@@ -85,11 +88,10 @@ export default {
                     'Content-Type': 'application/json'
                 },
             }).then(resp=>{
-                if(!resp.ok) rej(resp.statusText)
+                if(!resp.ok) setError(resp)
                 return resp.json()
             })
             .then(json => res(json))
-            .catch(err=>rej(err))
         })
     },
 
@@ -111,9 +113,9 @@ export default {
             oReq.onload = function (oEvent) {
                 var arrayBuffer = oReq.response;
                 if (arrayBuffer) {
-                    res(arrayBuffer)
+                    return res(arrayBuffer)
                 }
-                rej(oReq.response)
+                return rej(oReq)
             };
 
             oReq.send(null);

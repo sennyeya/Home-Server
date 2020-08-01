@@ -42,21 +42,30 @@ return new Promise(async (resolve, reject) => {
   return ffmpeg()
     .input(inputPath)
     .inputOptions([`-ss ${startTimeInSeconds}`])
-    .outputOptions([`-t ${fragmentDurationInSeconds}`])
+    .outputOptions([`-vf scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2`, `-t ${fragmentDurationInSeconds}`])
     .noAudio()
     .output(outputPath)
     .on('end', resolve)
-    .on('error', reject)
+    .on('error', (e)=>{console.log(e);reject(e)})
     .run();
   });
 };
+
+const waitUntilAccessible = (path) =>{
+  try{
+    fs.unlinkSync(path)
+  }catch(err){
+    console.log(`Could not unlink path, received error: ${err}`)
+    setTimeout(()=>waitUntilAccessible(path), 5000)
+  }
+}
 
 const removeMP4 = (path) =>{
   for(let file of fs.readdirSync(path)){
       let fileExt = file.split(".");
       fileExt = fileExt[fileExt.length-2]
       if(fileExt!=='thumb'){
-          fs.unlinkSync(path+"/"+file)
+        waitUntilAccessible(path+"/"+file)
       }
   }
 }
@@ -91,7 +100,7 @@ const generateThumbnail = (id,path,numChunks = 10)=>{
       }
       let fragFolder = folder.substring(0, folder.length-1);
       console.log("Merging fragments.")
-      await mergeFilesAsync(fs.readdirSync(fragFolder),fragFolder, "thumb.mp4");
+      await mergeFilesAsync(fs.readdirSync(fragFolder),fragFolder, "thumb.mp4", id);
       console.log(`Successfully merged into ${output}.`)
       removeMP4(folder.substring(0,folder.length-1))
       res(output)
@@ -103,13 +112,16 @@ const generateThumbnail = (id,path,numChunks = 10)=>{
 
 async function compressImage(id,path){
   return new Promise((res, rej)=>{
-    let outputFile = pathUtil.join(__dirname, "../","\\public\\thumbnails\\" + id+".jpeg");
+    let outputFile = pathUtil.join(__dirname, "../","\\public\\thumbnails\\images\\" + id+".jpeg");
     if(fs.existsSync(outputFile)){
       res(outputFile);
       return;
     }
     gm(path)
-      .thumbnail(1024, 1024)
+      .resize('1920', '1080')
+      .gravity('Center')
+      .background("black")
+      .extent(1920, 1080)
       .write(outputFile, function (err) {
           if (err) rej(err);
           res(outputFile)
@@ -147,18 +159,18 @@ const screenShot = async (input, output) =>{
   })
 }
 
-const mergeFilesAsync = async (files, folder, filename) =>
+const mergeFilesAsync = async (files, folder, filename, id) =>
 {
   return new Promise((res, rej) => {
-    let path = __dirname + "\\tmp.txt"
+    let path = __dirname + `\\${id}.txt`;
     let tempFile = fs.createWriteStream(path)
     for(let file of files){
       tempFile.write('file \''+folder.replace(/\\/g,"/")+"/"+file+"\'\n")
     }
     tempFile.close();
     exec(`ffmpeg -f concat -safe 0 -i \"${path}\" -c:v copy \"${folder+"\\"+filename}\"`, (err, stdout, stderr)=>{
-      if(err) rej(err)
-      fs.unlinkSync(path)
+      if(err) {console.log(err);rej(err)}
+      waitUntilAccessible(path)
       res()
     })
   })

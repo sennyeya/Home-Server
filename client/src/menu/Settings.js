@@ -1,17 +1,13 @@
-import React from 'react';
-import MiniProfile from './MiniProfile'
-import ThemeContext from '../contexts/ThemeContext';
+import React, { useContext } from 'react';
+import ThemeContext, { useThemeOutlet } from '../contexts/ThemeContext';
 import ToggleSlider from '../shared/ToggleSlider'
 
 export default function Settings(props) {
+  const {theme} = useContext(ThemeContext)
+  const setTheme = useThemeOutlet()
   return (
-        <ThemeContext.Consumer>
-          {({theme})=>
-            <>
-              <ToggleSlider update={props.toggle} val1={'light mode'} val2={'dark mode'} cond={theme==='dark'}/>
-              {props.user?<MiniProfile user={props.user}/>:<></>}
-            </>
-          }
-        </ThemeContext.Consumer>
+    <>
+      <ToggleSlider update={setTheme} val1={'light'} val2={'dark'} cond={theme==='dark'}/>
+    </>
   )
 }

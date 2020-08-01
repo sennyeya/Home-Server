@@ -1,0 +1,5 @@
+
+
+function createClips = (videoPath) =>{
+
+}

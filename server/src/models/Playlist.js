@@ -5,7 +5,7 @@ const {MetadataSchema} = require('./Metadata')
 var playlistSchema = new Schema({
     name: String,
     created: Date,
-    items: [MetadataSchema]
+    items: [{type:Schema.Types.ObjectId, ref:'metadata'}]
 });
 
 module.exports = {
