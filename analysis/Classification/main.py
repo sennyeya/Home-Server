@@ -4,7 +4,7 @@ import numpy as np
 import IPython.display as display
 from PIL import Image
 import matplotlib.pyplot as plt
-from tensorflow.keras import models, layers, datasets
+from tensorflow.keras import models, layers, datasets, preprocessing
 import tensorflow.keras as keras
 
 import os
@@ -13,29 +13,32 @@ import glob
 import pathlib
 import cv2
 
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+	try:
+		for gpu in gpus:
+			tf.config.experimental.set_memory_growth(gpu, True)
+	except RuntimeError as e:
+		print(e)
+
 folder = "F:/UCF101/UCF-101/"
 
 video = tfds.features.Video(shape=(None, None, None, 3))
 
 def load_video(path, max_frames=0):
-	print(path)
-	frames = []
-	# Path to video file 
-	cap = cv2.VideoCapture(folder+path) 
-
-	# Read until video is completed
-	while (cap.isOpened()):
-		# Capture frame-by-frame
-		ret, frame = cap.read()
-		if ret == True:
-			frames.append(frame.astype('float32') / 255.)
-		else:
-			break
-	
-	# When everything done, release the video capture object
-	cap.release()
-	print(len(frames))
-	return frames
+	arr = []
+	path = folder+"/"+path
+	for file in os.listdir(path):
+		image = Image.open(path+"/"+file, "r")
+		width, height = image.size
+		pixel_values = list(image.getdata())
+		if image.mode == "RGB":
+			channels = 3
+		elif image.mode == "L":
+			channels = 1
+		pixel_values = np.array(pixel_values).reshape((width, height, channels))
+		arr.append(pixel_values)
+	return np.array(arr)
 
 class DataGenerator(keras.utils.Sequence):
 	def __init__(self, list_IDs, labels, batch_size=32, dim=(32,32,32), n_channels=1,
@@ -59,6 +62,8 @@ class DataGenerator(keras.utils.Sequence):
 
 		# Find list of IDs
 		list_IDs_temp = [self.list_IDs[k] for k in indexes]
+  
+		print(list_IDs_temp)
 
 		# Generate data
 		X, y = self.__data_generation(list_IDs_temp)
@@ -83,7 +88,6 @@ class DataGenerator(keras.utils.Sequence):
 
 			# Store class
 			y.append(self.labels[ID])
-
 		return np.array(X), np.array(y)
 
 #classes = list(folder.glob('*/*.json'))
@@ -98,9 +102,9 @@ NUMBER_EPOCHS = 1
 f = open("F:\\UCF101\\ucfTrainTestlist\\trainlist01.txt")
 label_desc = f.readlines()
 
-inputs = np.array([e.strip().split(" ")[0] for e in label_desc])
+inputs = np.array([e.strip().split(" ")[0][:-4] for e in label_desc])
 labels = np.array([float(e.strip().split(" ")[1]) for e in label_desc])
-
+print(inputs)
 def video_gen():
 	for elem in range(len(inputs)):
 		print(labels[elem])
@@ -118,7 +122,7 @@ gen = DataGenerator(inputs, labels, batch_size=1)
 model = models.Sequential()
 
 # variable length, set height, set width, 3 channels
-model.add(layers.Input(shape=(None, 240, 320, 3)))
+model.add(layers.Input(shape=(None, 320, 240, 3)))
 model.add(layers.Conv3D(16, (3, 3, 3), activation='relu'))
 model.add(layers.MaxPooling3D((2,2, 2)))
 model.add(layers.Conv3D(64, (3, 3, 3), activation='relu'))
