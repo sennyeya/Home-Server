@@ -1,5 +1,5 @@
 /server/src/public/*
-*/known_hosts.txt
+/server/known_hosts.txt
 /server/tmp.txt
 /server/.env
 */node_modules/
