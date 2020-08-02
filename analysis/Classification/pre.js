@@ -27,16 +27,21 @@ const generateClips = async (dir) =>{
     }
 }
 
-generateClips(ucf)
+//generateClips(ucf)
 
 const removeIncorrect = (dir) =>{
     for(let folder of fs.readdirSync(dir)){
         for(let file of fs.readdirSync(dir+"/"+folder)){
             if(!file.endsWith(".avi")){
-                fs.unlinkSync(dir+"/"+folder+"/"+file)
+                let fileName = dir+"/"+folder+"/"+file
+                if(!fs.lstatSync(fileName).isDirectory()){
+                    fs.unlinkSync(fileName)
+                }else{
+                    fs.rmdirSync(fileName, {recursive:true})
+                }
             }
         }
     }
 }
 
-//removeIncorrect(ucf)
+removeIncorrect(ucf)

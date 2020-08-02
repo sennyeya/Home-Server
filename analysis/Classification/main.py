@@ -38,7 +38,7 @@ def load_video(path, max_frames=0):
 			channels = 1
 		pixel_values = np.array(pixel_values).reshape((width, height, channels))
 		arr.append(pixel_values)
-	return np.array(arr)
+	return tf.convert_to_tensor(arr)
 
 class DataGenerator(keras.utils.Sequence):
 	def __init__(self, list_IDs, labels, batch_size=32, dim=(32,32,32), n_channels=1,
@@ -88,13 +88,14 @@ class DataGenerator(keras.utils.Sequence):
 
 			# Store class
 			y.append(self.labels[ID])
-		return np.array(X), np.array(y)
+		X = tf.keras.preprocessing.sequence.pad_sequences(X)
+		return X, np.array(y)
 
 #classes = list(folder.glob('*/*.json'))
 
 items = list(pathlib.Path(folder).glob("*/*.*"))
 
-BATCH_SIZE = 1
+BATCH_SIZE = 2
 STEPS_PER_EPOCH = 1 #np.ceil(len(items)/BATCH_SIZE)
 NUMBER_EPOCHS = 1
 #STEPS_PER_EPOCH = np.ceil(len(classes)/BATCH_SIZE)
@@ -117,7 +118,7 @@ dataset = tf.data.Dataset.from_generator(
 	(tf.TensorShape([]), tf.TensorShape([None]))
 )
 
-gen = DataGenerator(inputs, labels, batch_size=1)
+gen = DataGenerator(inputs, labels, batch_size=BATCH_SIZE)
 
 model = models.Sequential()
 
