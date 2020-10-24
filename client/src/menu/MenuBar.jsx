@@ -7,17 +7,23 @@ import menu from '../resources/menu-24px.svg'
 import MiniProfile from './MiniProfile'
 import UserContext from '../contexts/UserContext';
 
+/** The url routes for the different pages, for title changing. */
 const links = {
   '/mediaGallery':'Media',
   "/upload":"Upload",
   '/playlists':'Playlists',
-  '/':'Home'
+  '/':'Home',
+  "/dashboard":"Dashboard"
 }
 
-export default function MenuBar(props) {
+/** The MenuBar component is the menu bar at the top of the screen, it handles links to each page. */
+export default function MenuBar() {
   let {user} = useContext(UserContext)
+
+  /** Which page is the user currently on? */
   const [selected, setSelected] = React.useState(user?"Home":"Login");
 
+  /** Toggles the menu for use on mobile where it can hide. */
   const toggleMenu = () =>{
     if(document.getElementById("menu").className === "active"){
       document.getElementById("menu").className = "";
@@ -26,6 +32,7 @@ export default function MenuBar(props) {
     }
   }
 
+  /** Updates the selected page, for updating the page title. */
   useEffect(()=>{
     document.title = selected + " | HomeServer";
     if (/Mobi|Android/i.test(navigator.userAgent)){
@@ -33,6 +40,7 @@ export default function MenuBar(props) {
     }
   }, [selected])
 
+  /** Updates the user profile when the user changes. */
   useEffect(()=>{
     if(user){
       setSelected(links[window.location.pathname])
