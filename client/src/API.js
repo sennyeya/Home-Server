@@ -6,6 +6,15 @@ const setError = (resp) =>{
                         .catch(err=>{if(MessagingContext.setMessage) MessagingContext.setMessage({message:err})})
 }
 
+const authOptions = {
+    credentials:"include",
+    mode: 'cors',
+    headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+    }
+}
+
 /**
  * Server access class.
  * @property {Function} get Returns result of GET operation at requested URL.
@@ -19,9 +28,12 @@ export default {
     get(url, params={}){
         return new Promise((res, rej)=>{
             params = Object.keys(params).map(e=>e+"="+params[e]).join("&")
-            fetch(Config.api+url+(params?("?"+params):""), {credentials: 'include'})
+            fetch(Config.api+url+(params?("?"+params):""), authOptions)
                 .then(resp=>{
-                    if(!resp.ok) return setError(resp)
+                    if(!resp.ok){
+                        setError(resp);
+                        return rej({resp:resp.statusText})
+                    }
                     return resp.json()
                 })
                 .then(json=>res(json))
@@ -38,9 +50,12 @@ export default {
         url = Config.api.replace("/api/","") + route.substring(1) + url
         return new Promise((res, rej)=>{
             params = Object.keys(params).map(e=>e+"="+params[e]).join("&")
-            fetch(url+(params?("?"+params):""), {credentials: 'include'})
+            fetch(url+(params?("?"+params):""), authOptions)
                 .then(resp=>{
-                    if(!resp.ok) setError(resp)
+                    if(!resp.ok){
+                        setError(resp);
+                        return rej({resp:resp.statusText})
+                    }
                     return resp.json()
                 })
                 .then(json=>res(json))
@@ -63,7 +78,10 @@ export default {
                     'Content-Type': 'application/json'
                 },
             }).then(resp=>{
-                if(!resp.ok) setError(resp)
+                if(!resp.ok){
+                    setError(resp);
+                    return rej({resp:resp.statusText})
+                }
                 return resp.json()
             })
             .then(json => res(json))
@@ -88,7 +106,10 @@ export default {
                     'Content-Type': 'application/json'
                 },
             }).then(resp=>{
-                if(!resp.ok) setError(resp)
+                if(!resp.ok){
+                    setError(resp);
+                    return rej({resp:resp.statusText})
+                }
                 return resp.json()
             })
             .then(json => res(json))

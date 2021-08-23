@@ -77,7 +77,7 @@ app.get('/media_gallery', async (req, res)=>{
 })
 
 app.get('/reset_cache', async (req, res)=>{
-    await checkCache(storage)
+    checkCache(storage)
     res.status(200).json({message:"Running now."})
 })
 
@@ -270,7 +270,7 @@ async function getFiles(cd){
                 await newData.save();
                 let filename;
                 try{
-                    filename = await generateThumbnail(newData.id, fullPath, fullPath)
+                    filename = await generateThumbnail(newData.id, fullPath)
                 }catch(err){
                     console.log(err)
                     filename = 'F:/Fake Folder';
