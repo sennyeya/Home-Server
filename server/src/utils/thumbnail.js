@@ -37,6 +37,8 @@ return new Promise(async (resolve, reject) => {
     startTimeFraction + startTimeFractionIncrement
   );
 
+    console.log('FRAGMENT OUTPUT PATH'+fs.existsSync(outputPath))
+
   if(fs.existsSync(outputPath)) return resolve();
 
   return ffmpeg()
@@ -105,7 +107,8 @@ const generateThumbnail = (id,path,numChunks = 10)=>{
       removeMP4(folder.substring(0,folder.length-1))
       res(output)
     }catch(err){
-        res(output)
+      console.log(err)
+      rej(output)
     }
   })
 }
@@ -138,7 +141,7 @@ async function generatePoster(id, path, filename){
     let poster = dirname + ".jpeg";
 
     if(!fs.existsSync(sourceDir)||!fs.existsSync(video)){
-      await generateThumbnail(id, path, filename);
+      await generateThumbnail(id, filename);
     }
     if(fs.existsSync(poster)){
         res(poster)

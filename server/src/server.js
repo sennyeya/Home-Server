@@ -33,28 +33,25 @@ let hosts = fs.readFileSync('known_hosts.txt').toString().split("\n").map(host=>
     }
 });
 
-app.use(cors({credentials: true, origin: hosts}));
+app.use(cors({credentials: true, origin:hosts}));
 
 app.use(cookieSession({
     name: 'HomeServer',
     keys: [process.env.SESSION_SECRET],
     maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
 }));
-app.use(bodyParser.urlencoded({
-    extended: true, 
-    limit: '50mb',
-    parameterLimit: 100000 
-}));
-app.use(bodyParser.json());
 
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(ensureIndexes)
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 passport.use(User.createStrategy());
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(ensureIndexes)
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
@@ -87,6 +84,7 @@ app.post('/login', async (req, res)=>{
         res.status(200).json({username:req.user.username, viewed: req.user.viewed})
     }else{
         passport.authenticate('local', function (err, user, info) {
+            console.log({user, err, info})
             if(err){ 
               res.status(400).json({message: err}) 
             } else{ 
@@ -142,7 +140,7 @@ app.get('/is_auth', (req, res)=>{
     if(req.user){
         res.status(200).json({user:req.user})
     }else{
-        res.sendStatus(401)
+        res.status(401).json({err:true, errMessage:"No user found."})
     }
 })
 
