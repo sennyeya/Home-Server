@@ -15,13 +15,17 @@ export default function Playlist(props){
         API.get('user/playlist_items', {id:props.id}).then(e=>{
             setItems(e.items);
             let index = -1;
-            for(let elem in e.items){
-                if(e.items[elem]._id===props.current){
-                    index = elem;
+            if(props.current){
+                for(let elem in e.items){
+                    if(e.items[elem]._id===props.current){
+                        index = elem;
+                    }
                 }
-            }
-            if(index===-1){
-                setOffset(()=>{throw new Error("Playlist item not found")});
+                if(index===-1){
+                    setOffset(()=>{throw new Error("Playlist item not found")});
+                }
+            }else{
+                index = 0;
             }
             setOffset(Math.floor(index/size)*size);
             setLength(e.length);

@@ -32,6 +32,7 @@ export default function MiniProfile(props) {
         }
     }
     
+    /** On click listeners for modal closing. */
     useEffect(()=>{
         window.addEventListener('click', closeModalOnIrrelevantClick)
 

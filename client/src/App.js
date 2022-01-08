@@ -121,6 +121,6 @@ export default function App(props){
             </div>
           </div>
         </Router>
-      </div>
+    </div>
   )
 }
