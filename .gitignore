@@ -6,4 +6,3 @@
 /client/src/config.js
 **/__pycache__
 */env
-backend/db.sqlite3
