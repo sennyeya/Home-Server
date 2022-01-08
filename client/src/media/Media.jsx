@@ -28,7 +28,7 @@ export default function Media(props) {
     API.get(`data/${data.path}/`).then(e=>{
       setData(e);
       setLoading(false);
-      document.title = e.data.name;
+      document.title = e.data.name + " | HomeServer";
     })
   }, [])
 

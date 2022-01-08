@@ -2,5 +2,8 @@
 /server/known_hosts.txt
 /server/tmp.txt
 /server/.env
-*/node_modules/
+**/node_modules/
 /client/src/config.js
+/backend/env
+**/__pycache__
+*.sqlite3
