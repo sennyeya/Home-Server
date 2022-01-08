@@ -1,5 +1,0 @@
-{
-    "ext": ".js,.html,.jsx,.json",
-    "ignore":["./src/static/"],
-    "watch":["src/","known_hosts.txt"]
-}
