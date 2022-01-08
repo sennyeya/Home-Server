@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-const {PlaylistSchema} = require('./Playlist')
+const {PlaylistSchema} = require('./Playlist.model')
 
 var profileSchema = new Schema({
     name: String,

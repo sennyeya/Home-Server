@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-const {MetadataSchema} = require('./Metadata');
+const {MetadataSchema} = require('./Metadata.model');
 
 var watchDataSchema = new Schema({
     user: {type:Schema.Types.ObjectId, ref:"users"},
