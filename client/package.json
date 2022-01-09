@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^7.2.1",
     "apng-js": "^1.1.1",
+    "bootstrap": "^5.1.3",
     "ip": "^1.1.5",
     "local-ip-url": "^1.0.3",
     "os": "^0.1.1",
@@ -18,7 +19,7 @@
     "react-loader-spinner": "^3.1.14",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^5.0.0",
     "websocket": "^1.0.31"
   },
   "scripts": {

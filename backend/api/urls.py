@@ -16,8 +16,12 @@ Including another URLconf
 from django.urls import include, path, re_path
 from rest_framework import routers, parsers
 from rest_framework.response import Response
-from . import views
+from api import views
 from rest_framework.views import APIView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -41,8 +45,12 @@ class FileUploadView(APIView):
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('batch/', views.Batch.as_view()),
-    path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    re_path(r'^upload/(?P<filename>[^/]+)$', FileUploadView.as_view())
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/batch/', views.Batch.as_view()),
+    path('api/raw/<int:pk>/content/', views.RawContent.as_view()),
+    path('api/raw/<int:pk>/thumbnail/', views.RawThumbnail.as_view()),
+    path('api/raw/<int:pk>/poster/', views.RawPoster.as_view()),
+    re_path(r'^upload/(?P<filename>[^/]+)$', FileUploadView.as_view()),
+    path('api/', include(router.urls)),
 ]

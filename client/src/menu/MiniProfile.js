@@ -4,7 +4,7 @@ import './MiniProfile.css'
 import { Link } from 'react-router-dom';
 import API from '../API';
 import link from '../resources/launch-24px.svg'
-import UserContext from '../contexts/UserContext';
+import { useUserOutlet } from '../contexts/UserContext';
 
 /**
  * Profile picture menu for access to user specific pages.
@@ -13,7 +13,7 @@ import UserContext from '../contexts/UserContext';
  */
 export default function MiniProfile(props) {
     /** Logged in user from context. */
-    const {user} = useContext(UserContext)
+    const {user} = useUserOutlet
 
     /** Is menu popup open? */
     const [popupOpen, setPopupOpen] = React.useState(false);

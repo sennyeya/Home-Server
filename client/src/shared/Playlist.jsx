@@ -17,7 +17,7 @@ export default function Playlist(props){
             let index = -1;
             if(props.current){
                 for(let elem in e.items){
-                    if(e.items[elem]._id===props.current){
+                    if(e.items[elem].id===props.current){
                         index = elem;
                     }
                 }
@@ -42,7 +42,7 @@ export default function Playlist(props){
                 <Grid items={items.slice(offset, offset+size)} 
                     size={size}
                     highlight
-                    selected={[{_id:props.current}]}
+                    selected={[{id:props.current}]}
                     playlist={props.id}/>
                 {offset<length-size?<button onClick={()=>setOffset(offset+size)}>&#x203A;</button>:<></>}
                 </div>

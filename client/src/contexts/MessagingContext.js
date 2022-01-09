@@ -1,10 +1,8 @@
-import React, {useState, useMemo, useContext} from 'react'
+import React, {useState, useMemo, useContext, useEffect} from 'react'
 
-const MessageContext = React.createContext()
+export const MessageContext = React.createContext()
 
-export default MessageContext;
-
-export function MessageDisplayBoundary({ children }) {
+export default function MessageDisplayBoundary({ children }) {
   const [message, setMessage] = useState(null)
   const ctx = useMemo(() => ({ message, setMessage }), [message])
 

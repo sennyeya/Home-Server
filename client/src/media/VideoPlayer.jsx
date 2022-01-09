@@ -4,6 +4,8 @@ import API from '../API';
 import {LoadingIndicator} from '../shared/Loading';
 import MediaDetails from '../shared/MediaDetails';
 import Plyr from 'plyr'
+import { getMediaDetailLink } from '../shared/Utils';
+import { useAuthOutlet } from '../contexts/AuthorizationContext';
 
 /**
  * Video player, handles both server side and in memory videos.
@@ -19,6 +21,8 @@ export default function VideoPlayer({inMemory, blob, path, codec, data}){
 
     /** Start time value, collected from server. */
     let [startTime, setStartTime] = React.useState();
+
+    const {auth} = useAuthOutlet();
 
     /** Create the new PLYR video player. */
     const upgradeVideo = (player)=>{
@@ -68,14 +72,14 @@ export default function VideoPlayer({inMemory, blob, path, codec, data}){
     useEffect(()=>{
         // Get the last watched time.
         if(!inMemory){
-            setLoading(true)
-            API.get("watch/last_watched", {id:path}).then(e=>{
+            setLoading(false)
+            /*API.get("watch/last_watched", {id:path}).then(e=>{
                 setStartTime(e.time)
                 setLoading(false)
             }).catch(e=>{
                 setStartTime(0);
                 setLoading(false)
-            })
+            })*/
         }else{
             setLoading(false)
         }
@@ -103,7 +107,7 @@ export default function VideoPlayer({inMemory, blob, path, codec, data}){
                     onStalled={(e)=>updateViewing(e, "stalled")}
                     onSeeked={e=>updateViewing(e, "seeked")}
                     onLoadedMetadata={setTimeStamp}>
-                <source src={inMemory? blob: (Config.api+"storage/"+path)} type={inMemory?codec:"video/mp4"}/>
+                <source src={inMemory? blob: (getMediaDetailLink(path, 'content', auth.access))} type={inMemory?codec:"video/mp4"}/>
             </video>
         {inMemory?<></>:<MediaDetails data={data} id={path}/>}</>:<></>)}
         </>

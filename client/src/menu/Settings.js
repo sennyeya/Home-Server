@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import ThemeContext, { useThemeOutlet } from '../contexts/ThemeContext';
+import { ThemeContext, useThemeOutlet } from '../contexts/ThemeContext';
 import ToggleSlider from '../shared/ToggleSlider'
 
 /** User settings sub menu, currently just handles light-dark mode. */

@@ -3,17 +3,20 @@ import { LoadingIndicator } from './Loading';
 import Gallery from './Gallery'
 import API from '../API';
 import './RecommendedContent.css'
+import { useApiOutlet } from '../contexts/ApiContext';
 
 export default function RecommendedContent(props){
     let [loading, setLoading] = React.useState(true);
     let [items, setItems] = React.useState([]);
     let [offset, setOffset] = React.useState(0)
 
-    const updateContent = useCallback(()=>
-            API.get('watch/recommended_content', {id:props.id, offset}).then(e=>{
+    const {get} = useApiOutlet
+
+    const updateContent = useCallback(()=>{}
+            /*get('watch/recommended_content', {id:props.id, offset}).then(e=>{
                 setItems(items.concat(e));
                 setLoading(false)
-            }), [items, props.id])
+            })*/, [items, props.id])
 
     useEffect(()=>{
         setLoading(true)

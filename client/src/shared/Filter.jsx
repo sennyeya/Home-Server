@@ -69,8 +69,8 @@ export default function Filter(props) {
                     <FormElement label={<label>Video: </label>} item={<ToggleSlider cond={video} val1={true} val2={false} update={setVideo}/>}/>
                 </div>
                 <div className="filter-item type-tags">
-                    <FormElement label={<label>Tag(s): </label>} item={<AsyncMultiselect url="list_tags" update={setTags}/>}/>
-                    <FormElement label={<label>Sort By: </label>} item={<AsyncSingleSelect url="list_sortby" update={setSortBy} selected={sortBy}/>}/>
+                    <FormElement label={<label>Tag(s): </label>} item={<AsyncMultiselect url="tags" update={setTags}/>}/>
+                    <FormElement label={<label>Sort By: </label>} item={<AsyncSingleSelect url="tags" update={setSortBy} selected={sortBy}/>}/>
                 </div>
             </div>
         </div>

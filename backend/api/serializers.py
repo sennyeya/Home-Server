@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group
 from rest_framework import serializers
-from .models import User, Media, Tag, Profile
+from api.models import User, Media, Tag, Profile
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -18,7 +18,7 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class MediaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Media
-        fields = ['title', 'duration', 'views', 'playlists', 'people']
+        fields = ['title', 'duration', 'views', 'playlists', 'people', 'id']
 
 
 class TagSerializer(serializers.HyperlinkedModelSerializer):

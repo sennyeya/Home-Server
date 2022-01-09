@@ -41,7 +41,7 @@ export default function CreatePlaylist(){
         if(!name){
             setMessage(new Error("Name needs to be filled."))
         }else{
-            API.post("/user/create_playlist", {name, items:selected.map(e=>e._id)})
+            API.post("/user/create_playlist", {name, items:selected.map(e=>e.id)})
             .then(()=>{
                 setMessage("Successfully created a new playlist!")
                 window.location.href="/dashboard"

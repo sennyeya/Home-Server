@@ -4,6 +4,7 @@ import InputWrapper from './InputWrapper';
 import './Comments.css'
 import API from '../API';
 import { LoadingIndicator } from './Loading';
+import { useApiOutlet } from '../contexts/ApiContext';
 
 /**
  * Comment page, allows user to view comments for a media item and add their own.
@@ -20,6 +21,8 @@ export default function Comments(props){
     /** Set of comments for user to see. */
     const [comments, setComments] = React.useState([]);
 
+    const {get} = useApiOutlet();
+
     /** Upload comment to server. */
     const postComment = () =>{
         API.post('comment', {content: comment, media: props.media}).then(e=>{
@@ -31,7 +34,7 @@ export default function Comments(props){
     /** Load comments when loading state is true. */
     useEffect(()=>{
         if(loading){
-            API.get('comments', {media: props.media}).then(e=>{
+            get('comments', {media: props.media}).then(e=>{
                 setComments(e)
                 setLoading(false)
             });

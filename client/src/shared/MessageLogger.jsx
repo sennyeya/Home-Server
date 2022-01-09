@@ -1,5 +1,5 @@
 import React from 'react';
-import MessagingContext from '../contexts/MessagingContext'
+import {MessageContext} from '../contexts/MessagingContext'
 import './MessageLogger.css'
 
 export default class MessageLogger extends React.Component{
@@ -64,4 +64,4 @@ export default class MessageLogger extends React.Component{
     }
 }
 
-MessageLogger.contextType = MessagingContext;
+MessageLogger.contextType = MessageContext;
