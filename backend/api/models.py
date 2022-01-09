@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Model, CharField, IntegerField, FloatField, ForeignKey, \
     RESTRICT, CASCADE, OneToOneField, EmailField, ManyToManyField
-from .managers import MediaBulkManager
+from api.managers import MediaBulkManager
 # Create your models here.
 
 

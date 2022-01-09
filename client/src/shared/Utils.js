@@ -1,3 +1,6 @@
+
+import Config from '../config';
+
 const parseType = (value)=>{
     if(value==="true"||value==="false"){
         return value==="true"
@@ -9,7 +12,7 @@ const parseType = (value)=>{
     return value;
 }
 
-const getParam = (param) =>{
+export const getParamFromURL = (param) =>{
     let query = window.location.search;
     if(query){
         query = query.substring(1).split("&");
@@ -24,6 +27,6 @@ const getParam = (param) =>{
     return null;
 }
 
-module.exports = {
-    getParamFromURL: getParam
+export function getMediaDetailLink(id, ending, token){
+    return `${Config.api}raw/${id}/${ending}/?token=${encodeURIComponent(token)}`
 }

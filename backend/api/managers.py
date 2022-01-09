@@ -1,5 +1,6 @@
 from django.db.models import Manager
-from .tasks import handle_metadata_create
+from api.tasks import handle_metadata_create
+from api.utils.processing import make_poster
 
 
 class MediaBulkManager(Manager):

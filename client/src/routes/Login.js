@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import API from '../API';
 import {Redirect} from 'react-router-dom'
 import './Login.css'
 import FormElement from '../shared/FormElement';
 import InputWrapper from '../shared/InputWrapper.jsx'
-import UserContext, { useUserOutlet } from '../contexts/UserContext';
+import {UserContext, useUserOutlet } from '../contexts/UserContext';
+import { ApiContext, useApiOutlet } from '../contexts/ApiContext';
+import { useAuthOutlet } from '../contexts/AuthorizationContext';
 
 /**
  * Login page.
@@ -12,7 +14,7 @@ import UserContext, { useUserOutlet } from '../contexts/UserContext';
 export default function Login(props) {
     const {user} = useContext(UserContext)
 
-    const setUser = useUserOutlet();
+    const {setAuth} = useAuthOutlet();
 
     /** User entered username. */
     let [username, setUsername] = React.useState("");
@@ -23,17 +25,20 @@ export default function Login(props) {
     /** Error state. */
     let [errors, setErrors] = React.useState("");
 
+    const {post} = useApiOutlet()
+
     /** Send the user information to the server for validation. */
-    const postLogin = ()=>{
-        API.postRoute('/','/login', {username, password})
-            .then((data)=>{
-                setUser(data.user);
+    const postLogin = useMemo(()=>{
+        return async () => {
+            try{
+                const resp = await post('token/', {username, password})
+                setAuth(resp);
                 window.location.href="/"
-            })
-            .catch(err=>{
+            }catch(err){
                 setErrors(err.message)
-            })
-    }
+            }
+        }
+    }, [post, username, password, setErrors])
   return (
         <div className="login-container">
             <div className="login-input">
@@ -51,5 +56,5 @@ export default function Login(props) {
                 {user?<Redirect to="/"/>:<></>}
             </div>
         </div>
-)
+    )
 }

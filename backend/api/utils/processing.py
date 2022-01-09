@@ -1,7 +1,8 @@
 import cv2
 from numpy.random import randn
-from .video import open_video
-fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+from os import system
+from api.utils.video import open_video
+fourcc = cv2.VideoWriter_fourcc(*'H264')
 
 
 def get_thumbnail_path(path):
@@ -57,6 +58,8 @@ def make_poster(path):
 
     fps = cap.get(cv2.CAP_PROP_FPS)
 
+    poster_path = get_poster_path(path)
+
     for frame_num in frames:
         for i in range(bound(1, int(fps/1.5), 60)):
             if frame_num + i > frame_count - 1:
@@ -66,8 +69,7 @@ def make_poster(path):
             images.append(frame)
 
     height, width, _ = images[0].shape
-    video = cv2.VideoWriter(get_poster_path(
-        path), fourcc, fps, (width, height))
+    video = cv2.VideoWriter(poster_path, fourcc, fps, (width, height))
 
     for image in images:
         video.write(image)

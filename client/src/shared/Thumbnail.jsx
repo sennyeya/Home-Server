@@ -1,13 +1,17 @@
 import React, {useEffect} from 'react';
-import Config from '../config';
+import { useAuthOutlet } from '../contexts/AuthorizationContext';
 import {LoadingIndicatorOverlay, LoadingIndicator} from './Loading';
 import './Thumbnail.css'
+import { getMediaDetailLink } from './Utils';
+
 
 export default function Thumbnail(props) {
     const imageRef = React.createRef();
     const videoPlayerRef = React.createRef();
-    const [loading, setLoading] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
     const [buffering, setBuffering] = React.useState(false);
+
+    const {auth} = useAuthOutlet();
 
     const fullscreenVideo = (event) =>{
         if(event.target.orientation===90){
@@ -42,6 +46,7 @@ export default function Thumbnail(props) {
     }
 
     const startPlaying = (e) =>{
+        console.log(e.target.readyState)
         if(e.target.readyState<4){
             return setBuffering(true);
         }
@@ -60,23 +65,31 @@ export default function Thumbnail(props) {
         <div className="image-wrapper">
             <a href={props.select?undefined:("/media/"+props.path+(props.playlist?`?playlist=${props.playlist}`:""))}>
                 {
-                    !props.video
+                    false//!props.video
                     ?
-                    <img src={Config.api+"thumbnails/"+props.path} 
+                    <img src={getMediaDetailLink(props.path,"thumbnail", auth.access)} 
                         alt={props.path} ref={imageRef} 
                         className="image-content" 
                         style={loading?{display: "none"}:{}} 
                         onLoad={onImageLoad}/>
                     :
                     <video ref={videoPlayerRef} 
-                            src={Config.api+"thumbnails/"+props.path}
-                            poster={Config.api+"poster/"+props.path}
-                            muted loop 
+                            src={getMediaDetailLink(props.path,"poster", auth.access)}
+                            poster={getMediaDetailLink(props.path,"thumbnail", auth.access)}
+                            muted loop
                             onMouseEnter={startPlaying} 
                             onMouseLeave={endPlaying} 
                             id={props.path}
-                            onLoadedData={(e)=>{setLoading(false); setBuffering(true)}}
-                            onCanPlayThrough={(e)=>{setBuffering(false); e.target.className="";}}
+                            onLoadedData={(e)=>{
+                                console.log(e)
+                                setLoading(false); 
+                                setBuffering(true)
+                            }}
+                            onCanPlayThrough={(e)=>{
+                                console.log(e)
+                                setBuffering(false); 
+                                e.target.className="";
+                            }}
                             className={buffering?"video-loading":null}
                             style={loading?{display: "none"}:{}} 
                             onTouchStart={(e)=>props.updatePlaying(e.target)}

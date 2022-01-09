@@ -56,7 +56,7 @@ export default function Upload(props){
                     <input value={name} onChange={(e)=>setName(e.target.value)}/>
                 }/>
             }/>
-            <FormElement label={<p>Tag(s): </p>} item={<AsyncMultiselect url={"list_tags"} update={setTags}/>}/>
+            <FormElement label={<p>Tag(s): </p>} item={<AsyncMultiselect url={"tags"} update={setTags}/>}/>
             <button style={{marginTop:"5%"}} onClick={postData}>Finish Upload</button>
         </>
     )

@@ -4,18 +4,17 @@ import ViewCounter from '../shared/ViewCounter';
 import LikeBar from '../shared/LikeBar';
 import ViewIncrement from '../shared/ViewIncrement'
 
-export default function MediaDetails(props){
-    let {data} = props;
+export default function MediaDetails({data, id, video}){
     let hours = 0;
     let minutes = Math.floor((+data.duration)/60);
     let seconds = Math.round((+data.duration)%60);
     return (
         <div className="thumbnail-details">
-            <ViewIncrement id={props.id}/>
+            <ViewIncrement id={id}/>
             <div style={{display: 'flex', justifyContent:"space-between"}}>
-                <a>{data.name.replace(data.format,"")}</a>
+                <a>{data.title}</a>
                 {
-                    props.video
+                    video
                     ?
                     <TimeDisplay hours={hours} minutes={minutes} seconds={seconds}/>
                     :<></>

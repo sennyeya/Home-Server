@@ -5,7 +5,7 @@ import Settings from './Settings';
 import menu from '../resources/menu-24px.svg'
 
 import MiniProfile from './MiniProfile'
-import UserContext from '../contexts/UserContext';
+import UserContext, { useUserOutlet } from '../contexts/UserContext';
 
 /** The url routes for the different pages, for title changing. */
 const links = {
@@ -18,7 +18,7 @@ const links = {
 
 /** The MenuBar component is the menu bar at the top of the screen, it handles links to each page. */
 export default function MenuBar() {
-  let {user} = useContext(UserContext)
+  let {user} = useUserOutlet()
 
   /** Which page is the user currently on? */
   const [selected, setSelected] = React.useState(user?"Home":"Login");

@@ -1,13 +1,13 @@
 import React, {useEffect, useCallback, useMemo} from 'react';
 import Gallery from '../shared/Gallery';
 import {NumberedPages} from '../shared/Buttons';
-import API from '../API';
 import Loading from '../shared/Loading';
 import HistoryTracking from '../shared/HistoryTracking';
 import Search from '../shared/Search';
 import Filter from '../shared/Filter';
 import PageCounter from '../shared/PageCounter'
 import { getParamFromURL } from '../shared/Utils';
+import { useApiOutlet } from '../contexts/ApiContext';
 
 /**
  * Render a set of media items. Parameters passed in by url.
@@ -25,6 +25,8 @@ export default function MediaGallery(props) {
     const [searchLoading, setSearchLoading] = React.useState(false)
     const [filterLoading, setFilterLoading] = React.useState(false)
 
+    const {get} = useApiOutlet()
+
     const loadNext = useCallback(()=>{
         // Get items from API.
         let obj = {...searchOptions, ...filterOptions, offset};
@@ -34,7 +36,7 @@ export default function MediaGallery(props) {
                 onlyFilledValues[elem] = obj[elem]
             }
         }
-        API.get('media_gallery', onlyFilledValues).then(e=>{
+        get('media', onlyFilledValues).then(e=>{
             setMedia(e.media);
             setLength(e.length);
             setSearch(e.search||"");

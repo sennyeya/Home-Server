@@ -1,6 +1,6 @@
 from celery import shared_task
 from os.path import exists
-from .utils.processing import make_thumbnail, make_poster, get_poster_path, get_thumbnail_path
+from api.utils.processing import make_thumbnail, make_poster, get_poster_path, get_thumbnail_path
 
 
 @shared_task

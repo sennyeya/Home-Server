@@ -7,6 +7,7 @@ import Playlist from '../shared/Playlist';
 import RecommendedContent from '../shared/RecommendedContent';
 import Comments from "../shared/Comments.jsx";
 import TabSelect from '../shared/TabSelect';
+import { useApiOutlet } from '../contexts/ApiContext';
 
 
 export default function Media(props) {
@@ -19,16 +20,19 @@ export default function Media(props) {
   */
   const [data, setData] = React.useState({path:props.path});
 
+  const {get} = useApiOutlet();
+
   const playlist = window.location.search.indexOf("playlist")!==-1?window.location.search.substring(1)
                     .split("&").filter(e=>e.indexOf("playlist=")!==-1)[0]
                     .split("=")[1]:null;
 
   /** Load data on page load. */
   useEffect(()=>{
-    API.get(`data/${data.path}/`).then(e=>{
+    get(`media/${data.path}`).then(e=>{
+      console.log(JSON.stringify(e))
       setData(e);
       setLoading(false);
-      document.title = e.data.name + " | HomeServer";
+      document.title = e.title + " | HomeServer";
     })
   }, [])
 
@@ -38,23 +42,23 @@ export default function Media(props) {
         {
           loading? <LoadingIndicator/> :(
               <>{(
-                  data.video 
+                  true //data.video 
                   ?
-                  <VideoPlayer path={data.path} data={data.data}/>
+                  <VideoPlayer path={data.id} data={data}/>
                   :
-                  <ImageViewer data={data.data} path={data.path}/>
+                  <ImageViewer data={data} path={data.id}/>
                   )}
               
               </>)
         }
         {playlist?
           <Playlist id={playlist}
-                    current={data.path}/>
+                    current={data.id}/>
           :<></>}
       </div>
       <TabSelect tabs={["recommended", "comments"]} 
                   initialTab={"recommended"}
-                  content={[<RecommendedContent id={data.path}/>, <Comments media={data.path}/>]}
+                  content={[<RecommendedContent id={data.id}/>, <Comments media={data.id}/>]}
       />
     </>
   )

@@ -40,7 +40,7 @@ export default function Grid(props){
 
     return (
         <div className="content-grid" style={{justifyContent:(props.center?"center":"")}}>
-            {props.items.map((e,i)=>{
+            {props.items?props.items.map((e,i)=>{
                 return (
                     <GridItem size={props.size} 
                     data={e} 
@@ -52,7 +52,7 @@ export default function Grid(props){
                     selected={props.selected}
                     playlist={props.playlist}/>
                 )
-            })}
+            }): <></>}
         </div>
     )
 }
@@ -70,7 +70,7 @@ function GridItem({select, highlight, selected, data, playlist, updatePlaying, u
 
     useEffect(()=>{
         if(select || highlight){
-            setIsSelected(selected.some(e=>e._id===data._id))
+            setIsSelected(selected.some(e=>e.id===data.id))
         }
     }, [data, highlight, selected, select])
 
@@ -79,7 +79,7 @@ function GridItem({select, highlight, selected, data, playlist, updatePlaying, u
             if(selected){
                 update(selected.concat(data))
             }else{
-                update(selected.filter(e=>e._id!==data._id))
+                update(selected.filter(e=>e.id!==data.id))
             }
         }
     }, [selected, update, select, data])
@@ -97,7 +97,7 @@ function GridItem({select, highlight, selected, data, playlist, updatePlaying, u
                 onMouseDown={updateSelected}>
             <Thumbnail width={width} 
                         height={height} 
-                        path={data._id} 
+                        path={data.id} 
                         video={data.video} 
                         updatePlaying={updatePlaying}
                         select={select}
@@ -119,8 +119,8 @@ function ItemDetail(props){
     return (
         <div className="thumbnail-details">
             <div style={{display: 'flex', justifyContent:"space-between"}}>
-                <a href={props.select?undefined:("/media/"+data._id+(props.playlist?`?playlist=${props.playlist}`:""))}>
-                    {data.name.replace(data.format,"")}
+                <a href={props.select?undefined:("/media/"+data.id+(props.playlist?`?playlist=${props.playlist}`:""))}>
+                    {data.title}
                 </a>
                 {
                     props.video

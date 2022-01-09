@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react';
-import API from '../API';
 import {LoadingIndicatorSmall} from './Loading';
 import './AsyncMultiselect.css';
 import InputWrapper from './InputWrapper'
+import { useApiOutlet } from '../contexts/ApiContext';
 
 /**
  * Generic multiselect that gets data dynamically. Only supports single selection, which clears after text entry.
@@ -17,11 +17,12 @@ export default function AsyncMultiselect(props){
     let [filtered, setFiltered] = React.useState([])
     let [open, setOpen] = React.useState(false);
     let [selected, setSelected] = React.useState([]);
+    const {get} = useApiOutlet();
 
     // Get data.
     useEffect(()=>{
-        API.get(props.url).then(e=>{
-            setOptions(e.map((f, i)=>{return {value:f, id:i}}));
+        get(props.url).then(e=>{
+            setOptions(e.results.map((f, i)=>{return {value:f, id:i}}));
             setLoading(false)
         })
     }, [])

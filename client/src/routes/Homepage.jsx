@@ -5,25 +5,26 @@ import {LoadingIndicator} from '../shared/Loading';
 import {ButtonSeeMore} from '../shared/Buttons';
 import './Homepage.css'
 import BlurredContent from '../shared/BlurredContent';
-import UserContext from '../contexts/UserContext';
+import {UserContext} from '../contexts/UserContext';
+import { useApiOutlet } from '../contexts/ApiContext';
 
 /**
  * Displays the default home page for the user. Blurs out content if user not logged in.
  */
 export default function HomePage(props) {
     const {user} = useContext(UserContext)
-
+    const {get} = useApiOutlet()
     return (
         <>
             <h1>Images</h1>
             <div className="boxed-content">
-                <LoggedInContent retrieve={API.get} endpoint={"media_gallery"} params={{offset:0, image:true}}/>
+                <LoggedInContent retrieve={get} endpoint={"media"} params={{offset:0, image:true}}/>
                 {!user?<></>:<ButtonSeeMore url={"mediaGallery?image=true"}/>}
             </div>
 
             <h1>Videos</h1>
             <div className="boxed-content">
-                <LoggedInContent retrieve={API.get} endpoint={"media_gallery"} params={{offset:0, video:true}}/>
+                <LoggedInContent retrieve={get} endpoint={"media"} params={{offset:0, video:true}}/>
                 {!user?<></>:<ButtonSeeMore url={"mediaGallery?video=true"}/>}
             </div>
         </>
@@ -53,7 +54,8 @@ function LoggedInContent({retrieve, endpoint, params}){
     useEffect(()=>{
         if(loading){
             retrieve(endpoint, params).then(data=>{
-                setItems(data.media);
+                console.log(data)
+                setItems(data.results);
                 setLoading(false);
             }).catch(err=>{
                 setError(err.message);

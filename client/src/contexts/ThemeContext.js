@@ -1,9 +1,6 @@
 import React, { useState, useMemo, useContext, useEffect } from 'react';
 
-const ThemeContext =  React.createContext();
-
-export default ThemeContext;
-
+export const ThemeContext =  React.createContext();
 
 /**
  * Basic dark mode/ light mode switch CSS.
@@ -71,10 +68,9 @@ let ThemeSettings = {
 
 export {ThemeSettings}
 
-export function ThemeBoundary({children}){
+export default function ThemeBoundary({children}){
     const [theme, setTheme] = useState(localStorage.getItem('darkMode') || 'dark')
     const ctx = useMemo(()=>({theme, setTheme}), [theme]);
-
     useEffect(()=>{
         for(let val of Object.keys(ThemeSettings[theme])){
             document.body.style[val] = ThemeSettings[theme][val];
